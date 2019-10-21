@@ -1,2 +1,2 @@
-# apt-pkg-backup
-Backup your APT packages to a file with ease.
+# APT package backup
+Backup a list of installed packages with ease.
