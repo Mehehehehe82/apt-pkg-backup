@@ -1,0 +1,12 @@
+#!/bin/bash
+FILE=$@
+
+test "$FILE" = "" && FILE=Desktop/packages.txt
+
+printf "" > $FILE;
+for PACKAGE in $(aptitude search '~i!~M' -F "%p"); do 
+	dialog --title "Package notepad" \
+	--backtitle "Package listing" \
+	--yesno "Would you like to keep the package \"$PACKAGE\"?" 7 60
+	printf "$PACKAGE " >> $FILE; 
+done
