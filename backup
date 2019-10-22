@@ -1,12 +1,28 @@
 #!/bin/bash
 FILE=$@
 
-test "$FILE" = "" && FILE=Desktop/packages.txt
+test "$FILE" = "" && FILE=~/Desktop/packages.txt
 
-printf "" > $FILE;
-for PACKAGE in $(aptitude search '~i!~M' -F "%p"); do 
+note ( ) {
+	printf "$PACKAGE " >> $FILE;
+}
+
+check ( ) {
 	dialog --title "Package notepad" \
-	--backtitle "Package listing" \
-	--yesno "Would you like to keep the package \"$PACKAGE\"?" 7 60
-	printf "$PACKAGE " >> $FILE; 
+		--backtitle "Package listing" \
+		--yesno "Would you like to record the package \"$PACKAGE\"?" 7 60
+	case $? in
+		0) note;;
+		1) ;;
+		*) clear; echo Aborted.; exit;;
+	esac
+}
+
+rm $FILE;
+clear;
+for PACKAGE in $(aptitude search '~i!~M' -F "%p"); do
+	case $PACKAGE in
+		*linux*) note;;
+		*) check;;
+	esac
 done
